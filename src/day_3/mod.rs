@@ -19,10 +19,9 @@ fn number_of_trees_traversal(right: usize, down: usize) -> usize {
     let mut number_of_trees: usize = 0;
     let mut current_pos: usize = 0;
 
-    let mut down_count = down;
+    let mut down_count = 1;
 
     for line in raw_input {
-
         down_count -= 1;
         if down_count != 0 {
             continue;
