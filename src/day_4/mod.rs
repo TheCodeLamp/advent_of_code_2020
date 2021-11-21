@@ -4,8 +4,6 @@ use std::{
     str::FromStr,
 };
 
-mod passport_checker;
-
 use crate::utils;
 
 #[derive(Debug)]
@@ -80,9 +78,7 @@ impl Passport {
         }
     }
 
-    fn keys(&self) -> Vec<String> {
-        return self.data_map.keys().map(|k| k.to_owned()).collect();
-    }
+    // fn 7
 }
 
 fn is_valid(pass: &Passport) -> bool {
@@ -147,5 +143,5 @@ pub fn run_part_1() -> Result<usize, String> {
 
     return Ok(count);
 
-    return Err("Not finished.".to_string());
+    //return Err("Not finished.".to_string());
 }
