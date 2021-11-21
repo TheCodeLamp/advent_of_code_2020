@@ -1,49 +1,45 @@
-use std::{
-    collections::{HashMap, HashSet},
-    panic,
-    str::FromStr,
-};
+use std::collections::{HashMap, HashSet};
 
 use crate::utils;
 
-#[derive(Debug)]
-enum PassportKeys {
-    BYr, // (Birth Year)
-    IYr, // (Issue Year)
-    EYr, // (Expiration Year)
-    Hgt, // (Height)
-    HCl, // (Hair Color)
-    ECl, // (Eye Color)
-    PId, // (Passport ID)
-    CId, // (Country ID)
-}
+// #[derive(Debug)]
+// enum PassportKeys {
+//     BYr, // (Birth Year)
+//     IYr, // (Issue Year)
+//     EYr, // (Expiration Year)
+//     Hgt, // (Height)
+//     HCl, // (Hair Color)
+//     ECl, // (Eye Color)
+//     PId, // (Passport ID)
+//     CId, // (Country ID)
+// }
 
-impl From<String> for PassportKeys {
-    fn from(key_val: String) -> Self {
-        let key_val_vec: Vec<String> = key_val
-            .split(":")
-            .map(|x| String::from_str(x).unwrap())
-            .collect();
+// impl From<String> for PassportKeys {
+//     fn from(key_val: String) -> Self {
+//         let key_val_vec: Vec<String> = key_val
+//             .split(":")
+//             .map(|x| String::from_str(x).unwrap())
+//             .collect();
 
-        if key_val_vec.len() < 2 {
-            panic!("Wrong key conversion: {:?}", key_val)
-        }
+//         if key_val_vec.len() < 2 {
+//             panic!("Wrong key conversion: {:?}", key_val)
+//         }
 
-        return match key_val_vec[0].as_str() {
-            "byr" => PassportKeys::BYr,
-            "iyr" => PassportKeys::IYr,
-            "eyr" => PassportKeys::EYr,
-            "hgt" => PassportKeys::Hgt,
-            "hcl" => PassportKeys::HCl,
-            "ecl" => PassportKeys::ECl,
-            "pid" => PassportKeys::PId,
-            "cid" => PassportKeys::CId,
-            _ => panic!("Wrong key conversion: {:?}", key_val),
-        };
-    }
-}
+//         return match key_val_vec[0].as_str() {
+//             "byr" => PassportKeys::BYr,
+//             "iyr" => PassportKeys::IYr,
+//             "eyr" => PassportKeys::EYr,
+//             "hgt" => PassportKeys::Hgt,
+//             "hcl" => PassportKeys::HCl,
+//             "ecl" => PassportKeys::ECl,
+//             "pid" => PassportKeys::PId,
+//             "cid" => PassportKeys::CId,
+//             _ => panic!("Wrong key conversion: {:?}", key_val),
+//         };
+//     }
+// }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 struct Passport {
     data_map: HashMap<String, String>,
     missing_keys: HashSet<String>,
@@ -77,8 +73,6 @@ impl Passport {
             panic!("Same keys in the same passport: {:?}", key);
         }
     }
-
-    // fn 7
 }
 
 fn is_valid(pass: &Passport) -> bool {
@@ -102,10 +96,8 @@ pub fn run_part_1() -> Result<usize, String> {
     let mut temp_pass = Passport::new();
 
     for line in raw_input {
-        //println!("Raw line: {:?}", line);
         let tokenized_line: Vec<&str> = line.split(" ").collect();
-        //println!("Token Line: {:?}; len: {:?}", tokenized_line, tokenized_line.len());
-
+        
         if tokenized_line.len() == 1 && tokenized_line.contains(&"") {
             passports.push(temp_pass.clone());
             temp_pass = Passport::new();
@@ -119,8 +111,6 @@ pub fn run_part_1() -> Result<usize, String> {
                 let temp_key = temp_pair.next();
                 let temp_val = temp_pair.next();
 
-                // println!("(key:val) : ({:?}:{:?})", temp_key, temp_val);
-
                 (
                     temp_key.unwrap().to_string(),
                     temp_val.unwrap().to_string(),
@@ -130,18 +120,16 @@ pub fn run_part_1() -> Result<usize, String> {
             temp_pass.insert(key, val);
         }
     }
+    passports.push(temp_pass.clone());
 
     let mut count = 0;
 
     for pass in passports{
         if is_valid(&pass){
             count += 1;
-        }else{
-            //println!("{:?}", pass);
         }
+
     }
 
     return Ok(count);
-
-    //return Err("Not finished.".to_string());
 }
